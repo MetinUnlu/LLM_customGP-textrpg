@@ -8,30 +8,28 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
-from kivy.uix.scrollview import ScrollView
 from kivy.uix.label import Label
 from kivy.uix.popup import Popup
 from kivy.core.window import Window
 import json
-from functools import partial
 
 from langchain_community.llms import Ollama
 from langchain.callbacks.manager import CallbackManager
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 # Adding LLM memory ability
 from langchain.chains import ConversationChain
-from langchain.chains.conversation.memory import ConversationBufferMemory
 from langchain.memory import ConversationBufferWindowMemory
 from langchain.prompts.prompt import PromptTemplate
-from langchain.memory import ConversationTokenBufferMemory
+
 
 # For combat
 import random
 model='llama2:7b-chat-q5_K_M'
 # model= 'gemma:7b'
+# model='mistral'
 llm = Ollama(model=model,callback_manager=CallbackManager([StreamingStdOutCallbackHandler()]))
 # llm.temperature=0.6
-llm.num_predict=800# No code was selected, so no documentation can be generated.
+llm.num_predict=800 # To prevent the LLM from generating infinitely
 
 
 
@@ -45,7 +43,6 @@ PROMPT=PromptTemplate(input_variables=["history","input"],template=template)
 template_header="""
 "YOU ARE AN AI DUNGEON MASTER FOR RPG-TEXT GAME. YOUR MISSION IS TO CRAFT STORYLINE FOR ME, THE PLAYER.
 The story is set within a character's mind.
-WRITING STYLE IN Jim Butcher, JIM BUTCHER.
 FOLLOW UPDATED GUIDELINES. 
 INTEGRATE ANY PREVIOUS DECISIONS OR EVENTS FROM OUR ADVENTURES. 
 USE REALISTIC TONE, STAY AWAY FROM SENTIMENTS LIKE "RENEWED HOPE FOR FUTURE" OR "READY TO FACE WHATEVER CHALLENGES".
